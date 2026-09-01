@@ -6,7 +6,7 @@ import { CalendarDays, MapPin } from "lucide-react";
 import { TextEffect } from "@/components/motion-primitives/text-effect";
 import Backdrop from "@/components/Backdrop";
 import ReserveButton from "@/components/ReserveButton";
-import { OFFER, formatFCFA } from "@/lib/offer";
+import { OFFER, formatPrix } from "@/lib/offer";
 import { heroImage } from "@/lib/image-manifest";
 
 const STAGGER = 0.08;
@@ -65,15 +65,20 @@ export default function Hero() {
           🎉 Promotion spéciale
         </motion.span>
 
-        <TextEffect
-          as="h1"
-          per="word"
-          delay={STAGGER}
-          variants={titleVariants}
-          className="font-display text-3xl font-extrabold leading-tight text-encre sm:text-5xl md:text-6xl"
-        >
-          {`Un combo gourmand à ${formatFCFA(OFFER.PRIX)}`}
-        </TextEffect>
+        <h1 className="font-display text-3xl font-extrabold leading-tight text-encre sm:text-5xl md:text-6xl">
+          <TextEffect as="span" per="word" delay={STAGGER} variants={titleVariants}>
+            Un combo gourmand à
+          </TextEffect>{" "}
+          <motion.span
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            transition={{ duration: 0.3, ease: "easeOut", delay: STAGGER + 0.42 }}
+            className="whitespace-nowrap"
+          >
+            {formatPrix(OFFER.PRIX)}
+          </motion.span>
+        </h1>
 
         <motion.div
           initial="hidden"
@@ -105,9 +110,15 @@ export default function Hero() {
           transition={{ duration: 0.4, ease: "easeOut", delay: STAGGER * 3 }}
           className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
         >
-          <ReserveButton className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-mandarine px-8 py-3.5 text-base font-semibold text-creme transition-transform hover:scale-[1.02] active:scale-[0.98]">
-            Réserver mon combo
-          </ReserveButton>
+          <span className="group relative inline-block">
+            <span
+              aria-hidden
+              className="absolute inset-0 -z-10 scale-110 rounded-full bg-mandarine opacity-25 blur-xl transition-opacity duration-300 group-hover:opacity-40"
+            />
+            <ReserveButton className="relative inline-flex min-h-[44px] items-center justify-center rounded-full bg-mandarine px-8 py-3.5 text-base font-semibold text-creme transition-transform hover:scale-[1.02] active:scale-[0.98]">
+              Réserver mon combo
+            </ReserveButton>
+          </span>
           <a
             href={`https://wa.me/${OFFER.WHATSAPP_NUMERO_E164}`}
             target="_blank"
