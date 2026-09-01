@@ -8,29 +8,6 @@ import { UTENSIL_LAYOUT, UTENSIL_PATHS, type UtensilSpec } from "@/components/ba
 
 type BackdropVariant = "paper" | "dark" | "halo";
 
-const CENTER_MASK =
-  "radial-gradient(ellipse at center, transparent 0%, transparent 26%, black 55%)";
-
-function Dome() {
-  return (
-    <svg
-      aria-hidden
-      className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-[62%]"
-      width={1500}
-      height={1500}
-      viewBox="0 0 1500 1500"
-    >
-      <defs>
-        <radialGradient id="dome-fill" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={colors.creme} stopOpacity="1" />
-          <stop offset="100%" stopColor={colors.creme} stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      <circle cx="750" cy="750" r="748" fill="url(#dome-fill)" stroke={colors.sable} strokeWidth="1" />
-    </svg>
-  );
-}
-
 function BreathingHalos() {
   const reducedMotion = useReducedMotion();
   const breathe = reducedMotion
@@ -103,7 +80,7 @@ function UtensilIcon({
   );
 }
 
-function UtensilsLayer({ color, maskCenter }: { color: string; maskCenter?: boolean }) {
+function UtensilsLayer({ color }: { color: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -113,12 +90,7 @@ function UtensilsLayer({ color, maskCenter }: { color: string; maskCenter?: bool
       ref={ref}
       aria-hidden
       className="pointer-events-none absolute inset-0 overflow-hidden"
-      style={{
-        opacity: 0.05,
-        color,
-        maskImage: maskCenter ? CENTER_MASK : undefined,
-        WebkitMaskImage: maskCenter ? CENTER_MASK : undefined,
-      }}
+      style={{ opacity: 0.05, color }}
     >
       {UTENSIL_LAYOUT.map((spec, i) => (
         <UtensilIcon
@@ -171,9 +143,8 @@ export default function Backdrop({ variant }: { variant: BackdropVariant }) {
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-      <Dome />
       <BreathingHalos />
-      <UtensilsLayer color={colors.encre} maskCenter />
+      <UtensilsLayer color={colors.encre} />
     </div>
   );
 }

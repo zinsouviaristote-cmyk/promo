@@ -44,16 +44,22 @@ export type UtensilSpec = {
  * Positions écrites en dur : jamais de Math.random() ici, ça casse
  * l'hydratation Next (mismatch serveur/client) et ferait bouger les
  * ustensiles à chaque rechargement.
+ *
+ * Tous les pictos sont volontairement collés aux bords gauche/droit
+ * (marge de page), jamais au centre : ils encadrent le contenu au lieu
+ * de passer derrière.
  */
 export const UTENSIL_LAYOUT: UtensilSpec[] = [
-  { icon: "fork", top: "10%", left: "6%", size: 28, rotate: -12, duration: 18, delay: 0 },
-  { icon: "spoon", top: "74%", left: "9%", size: 22, rotate: 18, duration: 22, delay: 2.2 },
-  { icon: "wheat", top: "14%", left: "89%", size: 34, rotate: 8, duration: 20, delay: 4.1 },
-  { icon: "mint", top: "58%", left: "93%", size: 20, rotate: -6, duration: 24, delay: 1.3 },
-  { icon: "coffeeBean", top: "36%", left: "4%", size: 18, rotate: 30, duration: 16, delay: 6.4 },
-  { icon: "croissant", top: "84%", left: "78%", size: 40, rotate: -15, duration: 26, delay: 3.2 },
-  { icon: "cup", top: "92%", left: "46%", size: 26, rotate: 5, duration: 19, delay: 5.1 },
-  { icon: "steam", top: "6%", left: "48%", size: 24, rotate: 0, duration: 17, delay: 7.3 },
-  { icon: "bowl", top: "62%", left: "62%", size: 30, rotate: 10, duration: 23, delay: 8.2 },
-  { icon: "knife", top: "26%", left: "71%", size: 32, rotate: -25, duration: 21, delay: 9.4 },
+  // Colonne de gauche
+  { icon: "fork", top: "8%", left: "3%", size: 28, rotate: -12, duration: 18, delay: 0 },
+  { icon: "coffeeBean", top: "30%", left: "2%", size: 18, rotate: 30, duration: 16, delay: 6.4 },
+  { icon: "spoon", top: "52%", left: "5%", size: 22, rotate: 18, duration: 22, delay: 2.2 },
+  { icon: "knife", top: "74%", left: "4%", size: 32, rotate: -20, duration: 21, delay: 9.4 },
+  { icon: "steam", top: "92%", left: "6%", size: 24, rotate: 0, duration: 17, delay: 7.3 },
+  // Colonne de droite
+  { icon: "wheat", top: "12%", left: "92%", size: 34, rotate: 8, duration: 20, delay: 4.1 },
+  { icon: "croissant", top: "34%", left: "88%", size: 40, rotate: -15, duration: 26, delay: 3.2 },
+  { icon: "mint", top: "56%", left: "95%", size: 20, rotate: -6, duration: 24, delay: 1.3 },
+  { icon: "bowl", top: "78%", left: "90%", size: 30, rotate: 10, duration: 23, delay: 8.2 },
+  { icon: "cup", top: "94%", left: "93%", size: 26, rotate: 5, duration: 19, delay: 5.1 },
 ];
