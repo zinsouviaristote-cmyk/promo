@@ -1,10 +1,17 @@
 import Hero from "@/components/Hero";
+import WhatsIncluded from "@/components/WhatsIncluded";
+import PromoBanner from "@/components/PromoBanner";
 import ReservationForm from "@/components/ReservationForm";
+import PracticalInfo from "@/components/PracticalInfo";
+import FAQ from "@/components/FAQ";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
     <main>
       <Hero />
+      <WhatsIncluded />
+      <PromoBanner />
 
       <section id="reserver" className="px-6 py-20 md:px-12">
         <div className="mx-auto max-w-[560px] text-center">
@@ -19,6 +26,10 @@ export default function Home() {
           <ReservationForm />
         </div>
       </section>
+
+      <PracticalInfo />
+      <FAQ />
+      <Footer />
     </main>
   );
 }

@@ -67,7 +67,7 @@ export default function Hero() {
         </p>
       </div>
 
-      <div id="hero-sentinel" aria-hidden className="pointer-events-none absolute bottom-0 h-px w-full" />
+      <div id="hero-sentinel" aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px" />
     </section>
   );
 }

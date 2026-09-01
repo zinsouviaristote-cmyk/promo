@@ -169,7 +169,7 @@ export default function ReservationForm() {
             onBlur={() => handleBlur("telephone")}
             aria-invalid={Boolean(errors.telephone)}
             aria-describedby={errors.telephone ? "telephone-error" : undefined}
-            className="min-h-[44px] flex-1 bg-transparent px-4 py-3 text-encre outline-none"
+            className="min-h-[44px] min-w-0 flex-1 bg-transparent px-4 py-3 text-encre outline-none"
           />
         </div>
         {errors.telephone && (
