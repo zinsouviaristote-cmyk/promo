@@ -7,7 +7,7 @@ import ReserveButton from "@/components/ReserveButton";
 export default function PromoBanner() {
   return (
     <section className="px-4 py-4 md:px-8">
-      <div className="relative mx-auto max-w-4xl overflow-hidden rounded-banner bg-encre px-6 py-12 text-center sm:px-12">
+      <div className="relative mx-auto max-w-4xl overflow-hidden rounded-banner bg-encre px-6 py-12 text-center sm:px-12 md:py-9">
         <Backdrop variant="dark" />
         <div className="relative z-10">
           <PromoPrice />

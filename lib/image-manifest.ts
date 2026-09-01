@@ -8,9 +8,9 @@ export const heroImage = {
   src: "/combo-hero.webp",
   width: 1200,
   height: 1500,
-  alt: "Combo Table Thérapeutique : sandwich, yaourt et mignardises à 2 000 FCFA",
-  blurDataURL: "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAABQAwCdASoQABQAPu1kqU2ppaOiMAgBMB2JZACdMoRwAEPsAAD+Ijg9b8CXFI8mJ+tUQOu3j+4LmQoQT8ei4wVZLg6W83ugGri4AAAA",
-  isPlaceholder: true,
+  alt: "Sandwich gourmand Table Thérapeutique, coupé en deux, garni de viande, cheddar et crudités",
+  blurDataURL: "data:image/webp;base64,UklGRr4AAABXRUJQVlA4ILIAAAAwBACdASoQABMAPu1iqU2ppaOiMAgBMB2JbACdMoMYA0f87Lj22iR6gIAA/eOmtf1UKYO3FnWzebeXAcymxM7gI2c/1Iyj1ASeMAdio+bJo2I3+kH8ivTg8FSLllnisC9awRFVrGCB3vmYb6/2Pku355BALVwrhznYb8EgOkgtaG/hlpJg90r536BVdJIpBoGLblkiSxZhDTNhc3zxvC3VoSXK7fwNSwfbIVu3b/y/tgAA",
+  isPlaceholder: false,
 } as const;
 
 export const cardImages = {

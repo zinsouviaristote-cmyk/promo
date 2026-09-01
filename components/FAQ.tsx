@@ -20,7 +20,7 @@ export default function FAQ() {
   return (
     <section
       id="questions"
-      className="relative scroll-mt-14 overflow-hidden px-6 py-16 md:scroll-mt-16 md:px-12"
+      className="relative scroll-mt-14 overflow-hidden px-6 py-16 md:scroll-mt-16 md:px-12 md:py-12"
     >
       <Backdrop variant="paper" />
       <div className="relative z-10 mx-auto max-w-2xl">

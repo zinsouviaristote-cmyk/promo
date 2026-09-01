@@ -11,7 +11,7 @@ const POINTS = [
 
 export default function ChefNote() {
   return (
-    <section className="relative overflow-hidden px-6 py-16 md:px-12">
+    <section className="relative overflow-hidden px-6 py-16 md:px-12 md:py-12">
       <Backdrop variant="paper" />
       <div className="relative z-10 mx-auto grid max-w-5xl items-center gap-8 md:grid-cols-2 md:gap-12">
         <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-card md:max-w-none">

@@ -23,7 +23,7 @@ const STEPS = [
 
 export default function HowItWorks() {
   return (
-    <section className="relative overflow-hidden px-6 py-16 md:px-12">
+    <section className="relative overflow-hidden px-6 py-16 md:px-12 md:py-12">
       <Backdrop variant="paper" />
       <div className="relative z-10 mx-auto max-w-5xl">
         <h2 className="text-center font-display text-3xl font-extrabold text-encre sm:text-4xl">

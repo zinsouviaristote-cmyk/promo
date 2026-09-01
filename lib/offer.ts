@@ -20,6 +20,19 @@ export const OFFER = {
   WHATSAPP_PREFIXE: "229",
 } as const;
 
-export function formatFCFA(montant: number): string {
-  return `${montant.toLocaleString("fr-FR")} FCFA`;
+/** Espace fine insécable (U+202F) : séparateur de milliers garanti, quel
+ * que soit le moteur Intl/ICU du navigateur ou du serveur. */
+const NARROW_NBSP = " ";
+
+/**
+ * Formate un montant en FCFA avec une espace fine insécable entre les
+ * groupes de milliers (ex. "2 000 FCFA"). À utiliser partout où un prix
+ * est affiché : le séparateur ne doit jamais dépendre du formatage
+ * `toLocaleString` du runtime, qui peut varier d'un environnement à l'autre.
+ */
+export function formatPrix(montant: number): string {
+  const chiffres = Math.round(montant)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, NARROW_NBSP);
+  return `${chiffres}${NARROW_NBSP}FCFA`;
 }

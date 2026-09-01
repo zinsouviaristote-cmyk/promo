@@ -1,11 +1,11 @@
 import { CalendarDays, MapPin, Phone, Wallet } from "lucide-react";
 import Backdrop from "@/components/Backdrop";
-import { OFFER, formatFCFA } from "@/lib/offer";
+import { OFFER, formatPrix } from "@/lib/offer";
 
 const items = [
   { icon: MapPin, label: "Où ?", value: OFFER.LIEU },
   { icon: CalendarDays, label: "Quand ?", value: OFFER.DATE_EVENEMENT_LABEL },
-  { icon: Wallet, label: "Prix", value: `${formatFCFA(OFFER.PRIX)} / combo` },
+  { icon: Wallet, label: "Prix", value: `${formatPrix(OFFER.PRIX)} / combo` },
   {
     icon: Phone,
     label: "Contact",
@@ -22,7 +22,7 @@ export default function PracticalInfo() {
   return (
     <section
       id="infos"
-      className="relative scroll-mt-14 overflow-hidden px-6 py-16 md:scroll-mt-16 md:px-12"
+      className="relative scroll-mt-14 overflow-hidden px-6 py-16 md:scroll-mt-16 md:px-12 md:py-12"
     >
       <Backdrop variant="paper" />
       <div className="relative z-10">

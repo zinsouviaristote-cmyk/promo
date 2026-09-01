@@ -7,15 +7,20 @@ import { useReservation } from "@/components/ReservationProvider";
 import { useMediaQuery } from "@/lib/use-media-query";
 import ReservationForm from "@/components/ReservationForm";
 
+const OPEN_DURATION = 0.2;
+const CLOSE_DURATION = 0.15;
+
 export default function ReservationModal() {
   const { isOpen, closeReservation, restoreFocus } = useReservation();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const reducedMotion = useReducedMotion();
   const dragControls = useDragControls();
 
+  // L'overlay doit être plein (opacité + flou) dès la première frame,
+  // pas en fondu : seule la sortie s'anime, rapidement.
   const overlayVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
+    hidden: { opacity: 0, transition: { duration: CLOSE_DURATION } },
+    visible: { opacity: 1, transition: { duration: 0 } },
   };
 
   // Sur desktop, x/y:-50% recentre la boîte (left-1/2 top-1/2) : ce décalage
@@ -23,12 +28,32 @@ export default function ReservationModal() {
   // transform écrase la classe Tailwind -translate-x/y-1/2.
   const contentVariants = isDesktop
     ? {
-        hidden: { opacity: 0, scale: reducedMotion ? 1 : 0.96, x: "-50%", y: "-50%" },
-        visible: { opacity: 1, scale: 1, x: "-50%", y: "-50%" },
+        hidden: {
+          opacity: 0,
+          scale: reducedMotion ? 1 : 0.96,
+          x: "-50%",
+          y: "-50%",
+          transition: { duration: CLOSE_DURATION },
+        },
+        visible: {
+          opacity: 1,
+          scale: 1,
+          x: "-50%",
+          y: "-50%",
+          transition: { duration: OPEN_DURATION, ease: "easeOut" },
+        },
       }
     : {
-        hidden: { opacity: 0, y: reducedMotion ? 0 : "100%" },
-        visible: { opacity: 1, y: 0 },
+        hidden: {
+          opacity: 0,
+          y: reducedMotion ? 0 : "100%",
+          transition: { duration: CLOSE_DURATION },
+        },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: OPEN_DURATION, ease: "easeOut" },
+        },
       };
 
   return (
@@ -40,15 +65,14 @@ export default function ReservationModal() {
     >
       <AnimatePresence onExitComplete={restoreFocus}>
         {isOpen && (
-          <Dialog.Portal forceMount>
+          <Dialog.Portal forceMount container={typeof document !== "undefined" ? document.body : undefined}>
             <Dialog.Overlay asChild forceMount>
               <motion.div
-                className="fixed inset-0 z-50 bg-encre/45 backdrop-blur-sm"
+                className="fixed inset-0 z-[100] bg-encre/50 backdrop-blur-sm"
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
                 variants={overlayVariants}
-                transition={{ duration: 0.22 }}
               />
             </Dialog.Overlay>
 
@@ -57,7 +81,7 @@ export default function ReservationModal() {
               forceMount
               onOpenAutoFocus={(event) => event.preventDefault()}
               onCloseAutoFocus={(event) => event.preventDefault()}
-              className="fixed z-50 inset-x-0 bottom-0 md:inset-x-auto md:bottom-auto md:left-1/2 md:top-1/2"
+              className="fixed z-[100] inset-x-0 bottom-0 md:inset-x-auto md:bottom-auto md:left-1/2 md:top-1/2"
             >
               <motion.div
                 drag={!isDesktop && !reducedMotion ? "y" : false}
@@ -74,7 +98,6 @@ export default function ReservationModal() {
                 animate="visible"
                 exit="hidden"
                 variants={contentVariants}
-                transition={{ duration: 0.22, ease: "easeOut" }}
                 className="max-h-[85svh] w-full overflow-y-auto rounded-t-card bg-creme p-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] shadow-2xl md:max-h-[90svh] md:w-[480px] md:rounded-card md:p-8"
               >
                 <div

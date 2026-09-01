@@ -1,4 +1,4 @@
-import { OFFER, formatFCFA } from "@/lib/offer";
+import { OFFER, formatPrix } from "@/lib/offer";
 
 export function buildReservationMessage(params: {
   nom: string;
@@ -12,7 +12,7 @@ Je souhaite réserver mon combo :
 
 - Nom : ${nom}
 - Combos : ${quantite}
-- Total : ${formatFCFA(total)}
+- Total : ${formatPrix(total)}
 - Mon numéro : +${OFFER.WHATSAPP_PREFIXE} ${telephone}
 
 Pour le ${OFFER.DATE_EVENEMENT_LABEL.toLowerCase()} — ${OFFER.LIEU}.`;

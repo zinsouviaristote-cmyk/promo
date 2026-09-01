@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useInView } from "motion/react";
 import { AnimatedNumber } from "@/components/motion-primitives/animated-number";
 import { InView } from "@/components/motion-primitives/in-view";
-import { OFFER, formatFCFA } from "@/lib/offer";
+import { OFFER, formatPrix } from "@/lib/offer";
 
 export default function PromoPrice() {
   const ref = useRef<HTMLParagraphElement>(null);
@@ -31,13 +31,13 @@ export default function PromoPrice() {
         >
           <AnimatedNumber
             value={hasAnimated ? OFFER.PRIX : 0}
-            format={(n) => formatFCFA(n)}
+            format={(n) => formatPrix(n)}
             springOptions={{ bounce: 0, duration: 1200 }}
           />
         </p>
         {OFFER.PRIX_HABITUEL && (
           <p className="pb-2 font-display text-2xl font-medium text-creme/50 line-through">
-            {formatFCFA(OFFER.PRIX_HABITUEL)}
+            {formatPrix(OFFER.PRIX_HABITUEL)}
           </p>
         )}
       </div>

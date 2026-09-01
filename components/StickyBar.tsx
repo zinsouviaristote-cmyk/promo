@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ReserveButton from "@/components/ReserveButton";
-import { OFFER, formatFCFA } from "@/lib/offer";
+import { OFFER, formatPrix } from "@/lib/offer";
 
 export default function StickyBar() {
   const [heroVisible, setHeroVisible] = useState(true);
@@ -27,7 +27,7 @@ export default function StickyBar() {
     >
       <div className="mx-auto flex max-w-4xl items-center justify-between gap-4">
         <span className="font-display text-lg font-extrabold text-encre">
-          {formatFCFA(OFFER.PRIX)}
+          <span className="whitespace-nowrap">{formatPrix(OFFER.PRIX)}</span>
           <span className="ml-1 font-sans text-sm font-normal text-encre/60">
             / combo
           </span>

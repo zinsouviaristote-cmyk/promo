@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import ReserveButton from "@/components/ReserveButton";
-import { OFFER, formatFCFA } from "@/lib/offer";
+import { OFFER, formatPrix } from "@/lib/offer";
 
 const LINKS = [
   { id: "combo", label: "Le combo" },
@@ -14,10 +14,12 @@ const LINKS = [
 export default function Header() {
   const { scrollY, scrollYProgress } = useScroll();
   const [scrolled, setScrolled] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 80);
+    setHasScrolled(latest > 0);
   });
 
   useEffect(() => {
@@ -79,8 +81,8 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <span className="hidden rounded-full bg-basilic/10 px-3 py-1 text-xs font-semibold text-basilic md:inline">
-            {formatFCFA(OFFER.PRIX)}
+          <span className="hidden whitespace-nowrap rounded-full bg-basilic/10 px-3 py-1 text-xs font-semibold text-basilic md:inline">
+            {formatPrix(OFFER.PRIX)}
           </span>
           <ReserveButton className="inline-flex h-9 min-h-[36px] items-center justify-center rounded-full bg-mandarine px-4 text-sm font-semibold text-creme transition-transform hover:scale-[1.02] active:scale-[0.98] md:h-10 md:min-h-[40px] md:px-6">
             Réserver
@@ -89,8 +91,8 @@ export default function Header() {
       </div>
 
       <motion.div
-        className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-mandarine"
-        style={{ scaleX: scrollYProgress }}
+        className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-mandarine transition-opacity duration-300"
+        style={{ scaleX: scrollYProgress, opacity: hasScrolled ? 1 : 0 }}
       />
     </motion.header>
   );

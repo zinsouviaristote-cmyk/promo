@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Cookie, Milk, Sandwich as SandwichIcon } from "lucide-react";
 import Backdrop from "@/components/Backdrop";
 import { cardImages } from "@/lib/image-manifest";
-import { OFFER, formatFCFA } from "@/lib/offer";
+import { OFFER, formatPrix } from "@/lib/offer";
 
 const items = [
   {
@@ -32,12 +32,12 @@ export default function WhatsIncluded() {
   return (
     <section
       id="combo"
-      className="relative scroll-mt-14 overflow-hidden px-6 py-16 md:scroll-mt-16 md:px-12"
+      className="relative scroll-mt-14 overflow-hidden px-6 py-16 md:scroll-mt-16 md:px-12 md:py-12"
     >
       <Backdrop variant="paper" />
       <div className="relative z-10">
         <h2 className="text-center font-display text-3xl font-extrabold text-encre sm:text-4xl">
-          Votre combo à {formatFCFA(OFFER.PRIX)}
+          Votre combo à {formatPrix(OFFER.PRIX)}
         </h2>
 
         <div className="mx-auto mt-10 grid max-w-5xl gap-6 sm:grid-cols-3">

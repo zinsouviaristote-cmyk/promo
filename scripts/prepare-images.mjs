@@ -5,14 +5,15 @@
  * `npm run prepare-images` pour tout régénérer.
  *
  * Rôles :
- *  - hero        : photo qui montre le combo complet (sandwich + yaourt +
- *                  mignardises ensemble). Aucune photo de ce type n'était
- *                  disponible dans assets-source au moment de la génération
- *                  → un aplat de couleur du thème est utilisé à la place
- *                  (voir buildHeroPlaceholder). Dès qu'une vraie photo du
- *                  combo complet existe, ajoute-la sous SOURCES.hero et
- *                  relance ce script : le SVG de secours disparaît de
- *                  lui-même.
+ *  - hero        : idéalement une photo qui montre le combo complet
+ *                  (sandwich + yaourt + mignardises ensemble). Aucune photo
+ *                  de ce type n'était disponible dans assets-source au
+ *                  moment de la génération → on utilise la photo du
+ *                  sandwich (la plus nette et la mieux éclairée). Dès
+ *                  qu'une vraie photo du combo complet existe, remplace
+ *                  SOURCES.hero et relance ce script. Si le fichier
+ *                  référencé est introuvable, un aplat de couleur du
+ *                  thème est généré à la place (voir buildHeroPlaceholder).
  *  - sandwich, yaourt, mignardises : une photo par produit pour les cartes
  *    « Ce qui est inclus ».
  *  - chef        : photo portrait pour la section « Le mot du chef ».
@@ -39,7 +40,7 @@ const MANIFEST_PATH = path.join(ROOT, "lib", "image-manifest.ts");
  * hero: null volontairement (voir commentaire d'en-tête).
  */
 const SOURCES = {
-  hero: null,
+  hero: "WhatsApp Image 2026-09-01 at 16.08.02.jpeg",
   sandwich: "WhatsApp Image 2026-09-01 at 16.08.02.jpeg",
   yaourt: "WhatsApp Image 2026-09-01 at 16.08.07.jpeg",
   mignardises: "WhatsApp Image 2026-09-01 at 16.08.08.jpeg",
@@ -83,6 +84,22 @@ async function buildHeroPlaceholder() {
   missingSources.push("hero");
 
   return sharp(Buffer.from(svg)).webp({ quality: QUALITY });
+}
+
+async function buildHero(filename) {
+  const sourcePath = path.join(SOURCE_DIR, filename ?? "");
+  if (!filename || !existsSync(sourcePath)) {
+    return buildHeroPlaceholder();
+  }
+
+  return sharp(sourcePath)
+    .resize({
+      width: HERO_WIDTH,
+      height: HERO_HEIGHT,
+      fit: "cover",
+      position: sharp.strategy.attention,
+    })
+    .webp({ quality: QUALITY });
 }
 
 async function buildCard(role, filename, width = CARD_SIZE, height = CARD_SIZE) {
@@ -141,7 +158,7 @@ async function toBlurDataUrl(pipeline) {
 async function main() {
   await mkdir(PUBLIC_DIR, { recursive: true });
 
-  const heroPipeline = await buildHeroPlaceholder();
+  const heroPipeline = await buildHero(SOURCES.hero);
   const heroBuffer = await heroPipeline.clone().toBuffer();
   await writeFile(path.join(PUBLIC_DIR, "combo-hero.webp"), heroBuffer);
   const heroBlurDataUrl = await toBlurDataUrl(heroPipeline);
@@ -171,7 +188,7 @@ export const heroImage = {
   src: "/combo-hero.webp",
   width: ${HERO_WIDTH},
   height: ${HERO_HEIGHT},
-  alt: "Combo Table Thérapeutique : sandwich, yaourt et mignardises à 2 000 FCFA",
+  alt: "Sandwich gourmand Table Thérapeutique, coupé en deux, garni de viande, cheddar et crudités",
   blurDataURL: "${heroBlurDataUrl}",
   isPlaceholder: ${missingSources.includes("hero")},
 } as const;

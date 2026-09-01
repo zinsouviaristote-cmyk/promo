@@ -5,7 +5,7 @@ import { useFormStatus } from "react-dom";
 import { Loader2, Minus, Plus } from "lucide-react";
 import { reserveCombo, type ReservationResult } from "@/app/actions";
 import { reservationSchema } from "@/lib/validations";
-import { OFFER, formatFCFA } from "@/lib/offer";
+import { OFFER, formatPrix } from "@/lib/offer";
 
 type FieldErrors = Partial<Record<"nom" | "telephone" | "quantite", string>>;
 
@@ -222,7 +222,7 @@ export default function ReservationForm({
       </label>
 
       <p className="text-lg font-semibold text-encre">
-        Total : {formatFCFA(quantite * OFFER.PRIX)}
+        Total : {formatPrix(quantite * OFFER.PRIX)}
       </p>
 
       <SubmitButton />
