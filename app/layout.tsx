@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
+import MotionProvider from "@/components/MotionProvider";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -34,7 +35,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr" className={`${bricolage.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body>
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

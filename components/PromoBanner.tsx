@@ -1,20 +1,12 @@
-import { OFFER, formatFCFA } from "@/lib/offer";
+import { OFFER } from "@/lib/offer";
 import Countdown from "@/components/Countdown";
+import PromoPrice from "@/components/PromoPrice";
 
 export default function PromoBanner() {
   return (
     <section className="px-4 py-4 md:px-8">
       <div className="mx-auto max-w-4xl rounded-banner bg-encre px-6 py-12 text-center sm:px-12">
-        <div className="flex items-end justify-center gap-3">
-          <p className="font-display text-6xl font-extrabold text-mandarine sm:text-7xl">
-            {formatFCFA(OFFER.PRIX)}
-          </p>
-          {OFFER.PRIX_HABITUEL && (
-            <p className="pb-2 font-display text-2xl font-medium text-creme/50 line-through">
-              {formatFCFA(OFFER.PRIX_HABITUEL)}
-            </p>
-          )}
-        </div>
+        <PromoPrice />
 
         <div className="mt-4 flex flex-col gap-1 text-creme/80">
           <p>{OFFER.DATE_EVENEMENT_LABEL}</p>
