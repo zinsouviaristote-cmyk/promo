@@ -92,18 +92,8 @@ export default function Logo({
       style={{ letterSpacing: "-0.015em" }}
     >
       <span style={tableStyle}>Table&nbsp;</span>
-      {noShorten ? (
-        <span style={accentStyle}>Thérapeutique</span>
-      ) : (
-        <>
-          <span style={accentStyle} className="hidden min-[480px]:inline">
-            Thérapeutique
-          </span>
-          <span style={accentStyle} className="inline min-[480px]:hidden">
-            T.
-          </span>
-        </>
-      )}
+      {/* Suppression du repli : "Thérapeutique" s'affiche sur tous les écrans */}
+      <span style={accentStyle}>Thérapeutique</span>
     </a>
   );
 }

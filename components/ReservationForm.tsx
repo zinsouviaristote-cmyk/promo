@@ -1,13 +1,14 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useEffect, useRef, useState } from "react";
 import { Loader2, Minus, Plus } from "lucide-react";
-import { reserveCombo, type ReservationResult } from "@/app/actions";
 import { reservationSchema } from "@/lib/validations";
 import { OFFER, formatPrix } from "@/lib/offer";
 
 type FieldErrors = Partial<Record<"nom" | "telephone" | "quantite", string>>;
+
+// Remplacez cet ID par celui fourni par Formspree (ex: "xbjnqwe1")
+const FORMSPREE_FORM_ID = "mwlkovak";
 
 function validateField(
   field: "nom" | "telephone",
@@ -19,54 +20,27 @@ function validateField(
   return issue?.message;
 }
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full bg-mandarine px-8 py-3.5 text-base font-semibold text-creme transition-transform hover:scale-[1.01] active:scale-[0.98] disabled:opacity-70"
-    >
-      {pending ? (
-        <>
-          <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
-          Envoi…
-        </>
-      ) : (
-        "Confirmer ma réservation"
-      )}
-    </button>
-  );
-}
-
 export default function ReservationForm({
   autoFocusNom = false,
 }: {
   autoFocusNom?: boolean;
 }) {
-  const [state, formAction] = useActionState<ReservationResult | null, FormData>(
-    reserveCombo,
-    null
-  );
-  const [dismissed, setDismissed] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [whatsappUrl, setWhatsappUrl] = useState("");
+
   const [quantite, setQuantite] = useState(1);
   const [nom, setNom] = useState("");
   const [telephone, setTelephone] = useState("");
+  const [contactWhatsApp, setContactWhatsApp] = useState(true);
   const [clientErrors, setClientErrors] = useState<FieldErrors>({});
+
   const formRef = useRef<HTMLFormElement>(null);
   const nomRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setDismissed(false);
-  }, [state]);
-
-  useEffect(() => {
     if (autoFocusNom) nomRef.current?.focus();
   }, [autoFocusNom]);
-
-  const showSuccess = state?.ok === true && !dismissed;
-  const serverErrors = state && !state.ok ? state.errors : undefined;
-  const errors: FieldErrors = serverErrors ?? clientErrors;
 
   function handleBlur(field: "nom" | "telephone") {
     const message = validateField(field, { nom, telephone, quantite });
@@ -86,21 +60,84 @@ export default function ReservationForm({
     setNom("");
     setTelephone("");
     setQuantite(1);
+    setContactWhatsApp(true);
     setClientErrors({});
-    setDismissed(true);
+    setIsSuccess(false);
   }
 
-  if (showSuccess && state?.ok) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    // 1. Validation côté client avant envoi
+    const parsed = reservationSchema.safeParse({
+      nom,
+      telephone,
+      quantite,
+      contactWhatsApp,
+    });
+
+    if (!parsed.success) {
+      const errorsObj: FieldErrors = {};
+      parsed.error.issues.forEach((issue) => {
+        const path = issue.path[0] as keyof FieldErrors;
+        if (path) errorsObj[path] = issue.message;
+      });
+      setClientErrors(errorsObj);
+      return;
+    }
+
+    setIsPending(true);
+
+    const totalPrix = formatPrix(quantite * OFFER.PRIX);
+    const numeroComplet = `+229${telephone}`;
+
+    // 2. Envoi des données vers Formspree
+    try {
+      const response = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          nom,
+          telephone: numeroComplet,
+          quantite,
+          total: totalPrix,
+          contactWhatsApp: contactWhatsApp ? "Oui" : "Non",
+        }),
+      });
+
+      if (response.ok) {
+        // 3. Génération du lien WhatsApp
+        const textMessage = encodeURIComponent(
+          `Bonjour, je souhaite réserver ${quantite} combo(s) pour un total de ${totalPrix}. Mon nom est ${nom}.`
+        );
+        const waUrl = `https://wa.me/${OFFER.WHATSAPP_NUMERO_E164}?text=${textMessage}`;
+
+        setWhatsappUrl(waUrl);
+        setIsSuccess(true);
+      } else {
+        alert("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
+      }
+    } catch {
+      alert("Problème de connexion. Veuillez vérifier votre réseau.");
+    } finally {
+      setIsPending(false);
+    }
+  }
+
+  if (isSuccess) {
     return (
       <div role="status" aria-live="polite" className="py-2 text-center">
-        <p className="text-2xl font-display font-extrabold text-encre">
+        <p className="font-display text-2xl font-extrabold text-encre">
           🎉 Votre demande de réservation est enregistrée
         </p>
         <p className="mt-3 text-encre/70">
-          Nous vous contactons sur WhatsApp pour confirmer.
+          Un e-mail nous a été transmis. Nous vous contactons également sur WhatsApp pour confirmer.
         </p>
         <a
-          href={state.whatsappUrl}
+          href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-6 inline-flex min-h-[44px] w-full items-center justify-center rounded-full bg-mandarine px-8 py-3.5 text-base font-semibold text-creme transition-transform hover:scale-[1.01] active:scale-[0.98]"
@@ -121,7 +158,7 @@ export default function ReservationForm({
   return (
     <form
       ref={formRef}
-      action={formAction}
+      onSubmit={handleSubmit}
       noValidate
       className="flex flex-col gap-5"
     >
@@ -140,13 +177,13 @@ export default function ReservationForm({
           value={nom}
           onChange={(e) => setNom(e.target.value)}
           onBlur={() => handleBlur("nom")}
-          aria-invalid={Boolean(errors.nom)}
-          aria-describedby={errors.nom ? "nom-error" : undefined}
+          aria-invalid={Boolean(clientErrors.nom)}
+          aria-describedby={clientErrors.nom ? "nom-error" : undefined}
           className="min-h-[44px] rounded-full border border-sable bg-creme px-4 py-3 text-encre outline-none focus-visible:border-mandarine"
         />
-        {errors.nom && (
+        {clientErrors.nom && (
           <p id="nom-error" className="text-sm text-red-700">
-            {errors.nom}
+            {clientErrors.nom}
           </p>
         )}
       </div>
@@ -157,7 +194,7 @@ export default function ReservationForm({
         </label>
         <div
           className={`flex items-center overflow-hidden rounded-full border bg-creme ${
-            errors.telephone ? "border-red-700" : "border-sable"
+            clientErrors.telephone ? "border-red-700" : "border-sable"
           }`}
         >
           <span className="select-none border-r border-sable bg-sable/40 px-4 py-3 font-medium text-encre/70">
@@ -173,14 +210,14 @@ export default function ReservationForm({
             value={telephone}
             onChange={(e) => setTelephone(e.target.value)}
             onBlur={() => handleBlur("telephone")}
-            aria-invalid={Boolean(errors.telephone)}
-            aria-describedby={errors.telephone ? "telephone-error" : undefined}
+            aria-invalid={Boolean(clientErrors.telephone)}
+            aria-describedby={clientErrors.telephone ? "telephone-error" : undefined}
             className="min-h-[44px] min-w-0 flex-1 bg-transparent px-4 py-3 text-encre outline-none"
           />
         </div>
-        {errors.telephone && (
+        {clientErrors.telephone && (
           <p id="telephone-error" className="text-sm text-red-700">
-            {errors.telephone}
+            {clientErrors.telephone}
           </p>
         )}
       </div>
@@ -208,14 +245,14 @@ export default function ReservationForm({
             <Plus className="h-5 w-5" aria-hidden />
           </button>
         </div>
-        <input type="hidden" name="quantite" value={quantite} />
       </div>
 
       <label className="flex items-center gap-2.5 text-sm text-encre/80">
         <input
           type="checkbox"
           name="contactWhatsApp"
-          defaultChecked
+          checked={contactWhatsApp}
+          onChange={(e) => setContactWhatsApp(e.target.checked)}
           className="h-5 w-5 rounded border-sable text-mandarine focus-visible:outline-mandarine"
         />
         Oui, contactez-moi sur WhatsApp.
@@ -225,7 +262,20 @@ export default function ReservationForm({
         Total : {formatPrix(quantite * OFFER.PRIX)}
       </p>
 
-      <SubmitButton />
+      <button
+        type="submit"
+        disabled={isPending}
+        className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full bg-mandarine px-8 py-3.5 text-base font-semibold text-creme transition-transform hover:scale-[1.01] active:scale-[0.98] disabled:opacity-70"
+      >
+        {isPending ? (
+          <>
+            <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+            Envoi…
+          </>
+        ) : (
+          "Confirmer ma réservation"
+        )}
+      </button>
     </form>
   );
 }

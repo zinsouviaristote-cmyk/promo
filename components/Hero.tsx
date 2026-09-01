@@ -11,8 +11,6 @@ import { heroImage } from "@/lib/image-manifest";
 
 const STAGGER = 0.08;
 
-// L'état "hidden" garde opacity:1 : le contenu doit rester visible dans le
-// HTML si le JS tarde à s'hydrater (connexion lente). Seul le transform anime.
 const fadeUp = {
   hidden: { opacity: 1, y: 16 },
   visible: { opacity: 1, y: 0 },
@@ -31,15 +29,16 @@ const titleVariants = {
 
 export default function Hero() {
   return (
-    <section className="relative flex min-h-svh flex-col justify-center gap-3 overflow-hidden px-6 pb-6 pt-20 md:grid md:min-h-[90svh] md:grid-cols-2 md:items-center md:gap-12 md:px-12 md:pb-16 md:pt-24 lg:px-20">
+    <section className="relative flex min-h-svh flex-col justify-center gap-6 overflow-hidden px-6 pb-6 pt-20 md:grid md:min-h-[90svh] md:grid-cols-2 md:items-center md:gap-12 md:px-12 md:pb-16 md:pt-24 lg:px-20">
       <Backdrop variant="halo" />
 
-      <div className="relative order-1 md:order-2">
+      {/* BLOC IMAGE : Taille encore plus grande sur mobile */}
+      <div className="relative order-1 w-full md:order-2">
         <motion.div
           initial={{ opacity: 1, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative mx-auto aspect-[4/5] max-h-[22svh] w-full max-w-sm overflow-hidden rounded-card shadow-[0_20px_50px_-15px_rgba(23,19,16,0.35)] md:max-h-none md:max-w-md"
+          className="relative mx-auto aspect-[4/5] max-h-[48svh] w-full max-w-md overflow-hidden rounded-card shadow-[0_20px_50px_-15px_rgba(23,19,16,0.35)] md:max-h-none"
         >
           <Image
             src={heroImage.src}
@@ -54,7 +53,8 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <div className="relative order-2 flex flex-col items-start gap-3 md:order-1 md:gap-6">
+      {/* BLOC TEXTE + BOUTONS */}
+      <div className="relative order-2 flex flex-col items-start gap-4 md:order-1 md:gap-6">
         <motion.span
           initial="hidden"
           animate="visible"
@@ -103,27 +103,29 @@ export default function Hero() {
           </div>
         </motion.div>
 
+        {/* CONTENEUR DE BOUTONS : Centré sur mobile */}
         <motion.div
           initial="hidden"
           animate="visible"
           variants={fadeUp}
           transition={{ duration: 0.4, ease: "easeOut", delay: STAGGER * 3 }}
-          className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
+          className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center"
         >
-          <span className="group relative inline-block">
+          <span className="group relative block w-full text-center sm:inline-block sm:w-auto">
             <span
               aria-hidden
               className="absolute inset-0 -z-10 scale-110 rounded-full bg-mandarine opacity-25 blur-xl transition-opacity duration-300 group-hover:opacity-40"
             />
-            <ReserveButton className="relative inline-flex min-h-[44px] items-center justify-center rounded-full bg-mandarine px-8 py-3.5 text-base font-semibold text-creme transition-transform hover:scale-[1.02] active:scale-[0.98]">
+            <ReserveButton className="relative flex min-h-[44px] w-full items-center justify-center rounded-full bg-mandarine px-8 py-3.5 text-base font-semibold text-creme transition-transform hover:scale-[1.02] active:scale-[0.98] sm:w-auto">
               Réserver mon combo
             </ReserveButton>
           </span>
+
           <a
             href={`https://wa.me/${OFFER.WHATSAPP_NUMERO_E164}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-encre/20 px-8 py-3.5 text-base font-semibold text-encre transition-colors hover:bg-encre/5"
+            className="inline-flex min-h-[44px] w-full items-center justify-center rounded-full border border-encre/20 px-8 py-3.5 text-base font-semibold text-encre transition-colors hover:bg-encre/5 sm:w-auto"
           >
             Écrire sur WhatsApp
           </a>

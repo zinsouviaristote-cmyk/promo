@@ -4,6 +4,7 @@ assets-source
 out
 build
 .env.local
+.env.example
 .env*.local
 *.tsbuildinfo
 .DS_Store
