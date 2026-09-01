@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Inter } from "next/font/google";
+import { Bricolage_Grotesque, Fraunces, Inter } from "next/font/google";
 import MotionProvider from "@/components/MotionProvider";
 import GrainOverlay from "@/components/GrainOverlay";
 import { ReservationProvider } from "@/components/ReservationProvider";
@@ -36,6 +36,19 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+// Réservée au logo/wordmark "Table Thérapeutique" (header, footer, /logo) —
+// pas une troisième police pour le contenu, qui reste Bricolage + Inter.
+// Romain uniquement (l'italique ne sert plus) ; axes SOFT/WONK chargés pour
+// que le composant Logo puisse régler les empattements via
+// font-variation-settings.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: "variable",
+  axes: ["SOFT", "WONK"],
+  variable: "--font-logo",
   display: "swap",
 });
 
@@ -78,7 +91,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" className={`${bricolage.variable} ${inter.variable}`}>
+    <html lang="fr" className={`${bricolage.variable} ${inter.variable} ${fraunces.variable}`}>
       <body>
         <script
           type="application/ld+json"

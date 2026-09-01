@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import ReserveButton from "@/components/ReserveButton";
+import Logo from "@/components/Logo";
 import { OFFER, formatPrix } from "@/lib/offer";
 
 const LINKS = [
@@ -51,15 +52,8 @@ export default function Header() {
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-4 md:px-8">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-encre text-xs font-bold text-creme">
-            TT
-          </span>
-          <span className="hidden font-display text-sm font-extrabold text-encre md:inline">
-            Table Thérapeutique
-          </span>
-        </div>
+      <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-3 min-[480px]:px-4 md:px-8">
+        <Logo className="text-[16px] min-[480px]:text-[19px]" />
 
         <nav className="hidden items-center gap-6 md:flex">
           {LINKS.map(({ id, label }) => (

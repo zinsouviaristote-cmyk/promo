@@ -2,27 +2,18 @@ import { ImageResponse } from "next/og";
 import { colors } from "@/lib/theme";
 import { loadFrauncesBold } from "@/lib/logo-font";
 
+export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-export function generateImageMetadata() {
-  return [
-    { id: "small", size: { width: 32, height: 32 } },
-    { id: "large", size: { width: 512, height: 512 } },
-  ];
-}
-
-export default async function Icon({ id }: { id: string }) {
-  const isLarge = id === "large";
-  const box = isLarge ? 512 : 32;
-  const fontSize = isLarge ? 340 : 22;
+export default async function AppleIcon() {
   const fontData = await loadFrauncesBold();
 
   return new ImageResponse(
     (
       <div
         style={{
-          width: box,
-          height: box,
+          width: "100%",
+          height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -33,7 +24,7 @@ export default async function Icon({ id }: { id: string }) {
           style={{
             fontFamily: "Fraunces",
             fontWeight: 800,
-            fontSize,
+            fontSize: 120,
             lineHeight: 1,
             color: colors.mandarine,
           }}
@@ -43,8 +34,7 @@ export default async function Icon({ id }: { id: string }) {
       </div>
     ),
     {
-      width: box,
-      height: box,
+      ...size,
       fonts: [{ name: "Fraunces", data: fontData, weight: 800, style: "normal" }],
     }
   );

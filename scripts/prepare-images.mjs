@@ -126,6 +126,31 @@ async function buildCard(role, filename, width = CARD_SIZE, height = CARD_SIZE) 
     .webp({ quality: QUALITY });
 }
 
+function buildOgWatermark() {
+  const label = "Table Thérapeutique";
+  const paddingX = 16;
+  const paddingY = 10;
+  const fontSize = 22;
+  const pillWidth = label.length * (fontSize * 0.52) + paddingX * 2;
+  const pillHeight = fontSize + paddingY * 2;
+  const margin = 28;
+
+  return {
+    input: Buffer.from(`
+      <svg width="${OG_WIDTH}" height="${OG_HEIGHT}" xmlns="http://www.w3.org/2000/svg">
+        <rect x="${OG_WIDTH - pillWidth - margin}" y="${OG_HEIGHT - pillHeight - margin}"
+              width="${pillWidth}" height="${pillHeight}" rx="${pillHeight / 2}"
+              fill="${colors.encre}" opacity="0.55"/>
+        <text x="${OG_WIDTH - margin - pillWidth / 2}" y="${OG_HEIGHT - margin - pillHeight / 2 + fontSize * 0.34}"
+              text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700"
+              font-size="${fontSize}" fill="${colors.creme}">${label}</text>
+      </svg>
+    `),
+    top: 0,
+    left: 0,
+  };
+}
+
 async function buildOg(filename) {
   const sourcePath = path.join(SOURCE_DIR, filename);
   if (!existsSync(sourcePath)) {
@@ -137,7 +162,7 @@ async function buildOg(filename) {
               font-size="56" fill="${colors.mandarine}">${OFFER.PRIX} FCFA</text>
       </svg>
     `;
-    return sharp(Buffer.from(svg)).webp({ quality: QUALITY });
+    return sharp(Buffer.from(svg)).composite([buildOgWatermark()]).webp({ quality: QUALITY });
   }
 
   return sharp(sourcePath)
@@ -147,6 +172,7 @@ async function buildOg(filename) {
       fit: "cover",
       position: sharp.strategy.attention,
     })
+    .composite([buildOgWatermark()])
     .webp({ quality: QUALITY });
 }
 

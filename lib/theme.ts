@@ -36,6 +36,17 @@ export const ACTIVE_PRESET: PresetName = "comptoir-frais";
 
 export const colors = PRESETS[ACTIVE_PRESET];
 
+/**
+ * Couleur du second mot du wordmark ("Thérapeutique") sur fond clair.
+ * La mandarine pure (#F2600C) tombe à 3,2:1 de contraste sur le crème et
+ * devient molle à la taille du logo — cette teinte plus sombre corrige ça.
+ * Sur fond sombre, `colors.mandarine` reste utilisée telle quelle.
+ */
+export const logoAccentOnLight = "#D4520A";
+/** Léger éclaircissement au survol du second mot du wordmark, rien de plus. */
+export const logoAccentOnLightHover = "#E36A1F";
+export const logoAccentOnDarkHover = "#FF7A2E";
+
 export const radii = {
   card: "1.75rem",
   banner: "2rem",

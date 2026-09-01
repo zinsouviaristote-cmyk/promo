@@ -20,6 +20,7 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-bricolage)", "sans-serif"],
         sans: ["var(--font-inter)", "sans-serif"],
+        logo: ["var(--font-logo)", "serif"],
       },
       screens: {
         xs: "375px",

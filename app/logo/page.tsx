@@ -1,119 +1,69 @@
-import { AssietteMark, AssietteLockup } from "@/components/logo-concepts/ConceptAssiette";
-import { CroiseeMark, CroiseeLockup } from "@/components/logo-concepts/ConceptCroisee";
-import { TMark, TLockup } from "@/components/logo-concepts/ConceptT";
+import Logo from "@/components/Logo";
+import { LOGO_VARIANTS } from "@/lib/logo";
 
 export const metadata = {
   title: "Choix du logo — Table Thérapeutique",
   robots: { index: false, follow: false },
 };
 
-const SIZES = [24, 48, 200] as const;
+const SIZES = [17, 24, 56] as const;
 const BACKGROUNDS = [
-  { key: "creme", label: "Fond crème", bg: "bg-creme", fg: "text-encre" },
-  { key: "encre", label: "Fond encre", bg: "bg-encre", fg: "text-creme" },
-] as const;
-const VARIANTS = ["filled", "outline"] as const;
-
-const CONCEPTS = [
-  {
-    id: 1,
-    name: "Concept 1 — Assiette vue de dessus",
-    description:
-      "Cercle épais, fourchette et cuillère en négatif dans le disque.",
-    Mark: AssietteMark,
-    Lockup: AssietteLockup,
-  },
-  {
-    id: 2,
-    name: "Concept 2 — Fourchette et cuillère croisées",
-    description: "Un X formé par les deux couverts, arc de cloche au-dessus.",
-    Mark: CroiseeMark,
-    Lockup: CroiseeLockup,
-  },
-  {
-    id: 3,
-    name: "Concept 3 — Le « T » couvert",
-    description:
-      "Barre verticale = manche de cuillère, barre horizontale = dents de fourchette.",
-    Mark: TMark,
-    Lockup: TLockup,
-  },
+  { key: "creme", label: "Fond crème", bg: "bg-creme", onDark: false },
+  { key: "encre", label: "Fond encre", bg: "bg-encre", onDark: true },
 ] as const;
 
 export default function LogoPage() {
   return (
-    <main className="mx-auto max-w-6xl px-6 py-16 md:px-12">
+    <main className="mx-auto max-w-3xl px-6 py-16 md:px-12">
       <h1 className="font-display text-3xl font-extrabold text-encre sm:text-4xl">
         Choix du logo
       </h1>
       <p className="mt-2 max-w-2xl text-encre/70">
-        Trois concepts, chacun en 24px / 48px / 200px, sur fond crème et fond
-        encre, en version pleine et en version contour. Route temporaire — à
-        retirer une fois le concept choisi.
+        Wordmark typographique pur, trois réglages de Fraunces à comparer, à
+        17px / 24px / 56px, sur fond crème et fond encre. Route temporaire —
+        à retirer une fois la variante choisie.
       </p>
 
       <div className="mt-12 flex flex-col gap-16">
-        {CONCEPTS.map(({ id, name, description, Mark, Lockup }) => (
-          <section key={id} className="flex flex-col gap-6">
-            <div>
-              <h2 className="font-display text-xl font-extrabold text-encre">
-                {name}
-              </h2>
-              <p className="text-sm text-encre/60">{description}</p>
-            </div>
+        {(Object.entries(LOGO_VARIANTS) as [string, (typeof LOGO_VARIANTS)[1]][]).map(
+          ([key, variant]) => (
+            <section key={key} className="flex flex-col gap-6">
+              <div>
+                <h2 className="font-display text-xl font-extrabold text-encre">
+                  Variante {key} — {variant.label}
+                </h2>
+                <p className="text-sm text-encre/60">{variant.description}</p>
+              </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[720px] border-separate border-spacing-3">
-                <thead>
-                  <tr>
-                    <th className="text-left text-xs font-medium uppercase tracking-wide text-encre/50">
-                      Fond / version
-                    </th>
-                    {SIZES.map((size) => (
-                      <th
-                        key={size}
-                        className="text-left text-xs font-medium uppercase tracking-wide text-encre/50"
-                      >
-                        {size}px
-                      </th>
-                    ))}
-                    <th className="text-left text-xs font-medium uppercase tracking-wide text-encre/50">
-                      Lockup
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {BACKGROUNDS.map(({ key: bgKey, label, bg, fg }) =>
-                    VARIANTS.map((variant) => (
-                      <tr key={`${bgKey}-${variant}`}>
-                        <td className="whitespace-nowrap text-sm text-encre/70">
-                          {label} · {variant === "filled" ? "pleine" : "contour"}
-                        </td>
-                        {SIZES.map((size) => (
-                          <td key={size}>
-                            <div
-                              className={`flex items-center justify-center rounded-card border border-sable ${bg} ${fg}`}
-                              style={{ width: size + 32, height: size + 32 }}
-                            >
-                              <Mark variant={variant} style={{ width: size, height: size }} />
-                            </div>
-                          </td>
-                        ))}
-                        <td>
-                          <div
-                            className={`flex items-center rounded-card border border-sable px-4 py-3 ${bg} ${fg}`}
+              <div className="flex flex-col gap-6">
+                {BACKGROUNDS.map(({ key: bgKey, label, bg, onDark }) => (
+                  <div key={bgKey} className="flex flex-col gap-3">
+                    <p className="text-xs font-medium uppercase tracking-wide text-encre/50">
+                      {label}
+                    </p>
+                    <div className="flex flex-col gap-3">
+                      {SIZES.map((size) => (
+                        <div
+                          key={size}
+                          className={`flex items-center gap-4 rounded-card border border-sable px-6 py-5 ${bg}`}
+                        >
+                          <span
+                            className={`w-12 shrink-0 text-xs ${onDark ? "text-creme/40" : "text-encre/40"}`}
                           >
-                            <Lockup variant={variant} />
+                            {size}px
+                          </span>
+                          <div style={{ fontSize: size }}>
+                            <Logo variant={variant} onDark={onDark} noShorten />
                           </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        )}
       </div>
     </main>
   );
