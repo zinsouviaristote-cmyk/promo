@@ -39,7 +39,11 @@ function SubmitButton() {
   );
 }
 
-export default function ReservationForm() {
+export default function ReservationForm({
+  autoFocusNom = false,
+}: {
+  autoFocusNom?: boolean;
+}) {
   const [state, formAction] = useActionState<ReservationResult | null, FormData>(
     reserveCombo,
     null
@@ -50,10 +54,15 @@ export default function ReservationForm() {
   const [telephone, setTelephone] = useState("");
   const [clientErrors, setClientErrors] = useState<FieldErrors>({});
   const formRef = useRef<HTMLFormElement>(null);
+  const nomRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setDismissed(false);
   }, [state]);
+
+  useEffect(() => {
+    if (autoFocusNom) nomRef.current?.focus();
+  }, [autoFocusNom]);
 
   const showSuccess = state?.ok === true && !dismissed;
   const serverErrors = state && !state.ok ? state.errors : undefined;
@@ -83,11 +92,7 @@ export default function ReservationForm() {
 
   if (showSuccess && state?.ok) {
     return (
-      <div
-        role="status"
-        aria-live="polite"
-        className="rounded-card border border-sable bg-creme p-8 text-center"
-      >
+      <div role="status" aria-live="polite" className="py-2 text-center">
         <p className="text-2xl font-display font-extrabold text-encre">
           🎉 Votre demande de réservation est enregistrée
         </p>
@@ -118,13 +123,14 @@ export default function ReservationForm() {
       ref={formRef}
       action={formAction}
       noValidate
-      className="flex flex-col gap-5 rounded-card border border-sable bg-creme p-6 sm:p-8"
+      className="flex flex-col gap-5"
     >
       <div className="flex flex-col gap-1.5">
         <label htmlFor="nom" className="text-sm font-medium text-encre">
           Nom et prénom
         </label>
         <input
+          ref={nomRef}
           id="nom"
           name="nom"
           type="text"

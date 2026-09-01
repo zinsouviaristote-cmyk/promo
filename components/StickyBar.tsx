@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ReserveButton from "@/components/ReserveButton";
 import { OFFER, formatFCFA } from "@/lib/offer";
 
 export default function StickyBar() {
@@ -31,12 +32,9 @@ export default function StickyBar() {
             / combo
           </span>
         </span>
-        <a
-          href="#reserver"
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-mandarine px-6 py-2.5 text-sm font-semibold text-creme transition-transform active:scale-95"
-        >
+        <ReserveButton className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-mandarine px-6 py-2.5 text-sm font-semibold text-creme transition-transform active:scale-95">
           Réserver
-        </a>
+        </ReserveButton>
       </div>
     </div>
   );

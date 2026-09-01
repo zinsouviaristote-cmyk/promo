@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 import MotionProvider from "@/components/MotionProvider";
+import GrainOverlay from "@/components/GrainOverlay";
+import { ReservationProvider } from "@/components/ReservationProvider";
+import ReservationModal from "@/components/ReservationModal";
 import { OFFER } from "@/lib/offer";
 import { ogImage } from "@/lib/image-manifest";
 import "./globals.css";
@@ -81,7 +84,13 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(offerJsonLd) }}
         />
-        <MotionProvider>{children}</MotionProvider>
+        <GrainOverlay />
+        <MotionProvider>
+          <ReservationProvider>
+            {children}
+            <ReservationModal />
+          </ReservationProvider>
+        </MotionProvider>
       </body>
     </html>
   );
