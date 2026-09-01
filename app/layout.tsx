@@ -5,7 +5,7 @@ import { OFFER } from "@/lib/offer";
 import { ogImage } from "@/lib/image-manifest";
 import "./globals.css";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 const TITLE = "Combo gourmand à 2 000 FCFA — 12 septembre, Fidjrossè";
 const DESCRIPTION =
   "Sandwich + Yaourt + Mignardises à 2 000 FCFA. Réservez votre combo pour le samedi 12 septembre 2026 à Fidjrossè, Cotonou.";
