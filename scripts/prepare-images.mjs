@@ -204,7 +204,7 @@ export const chefImage = {
   src: "/chef.webp",
   width: ${CHEF_WIDTH},
   height: ${CHEF_HEIGHT},
-  alt: "Préparation des mignardises Table Thérapeutique le matin même à Fidjrossè",
+  alt: "Boîte de mignardises Table Thérapeutique fraîchement préparées, prêtes à emporter",
   isPlaceholder: ${missingSources.includes("chef")},
 } as const;
 

@@ -41,7 +41,7 @@ export const chefImage = {
   src: "/chef.webp",
   width: 900,
   height: 1125,
-  alt: "Préparation des mignardises Table Thérapeutique le matin même à Fidjrossè",
+  alt: "Boîte de mignardises Table Thérapeutique fraîchement préparées, prêtes à emporter",
   isPlaceholder: false,
 } as const;
 
