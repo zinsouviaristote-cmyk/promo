@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import Backdrop from "@/components/Backdrop";
 
 const questions = [
   {
@@ -11,14 +12,18 @@ const questions = [
   },
   {
     q: "Comment réserver ?",
-    a: "Remplissez le formulaire ci-dessus, ou écrivez-nous directement sur WhatsApp.",
+    a: "Cliquez sur « Réserver », remplissez le formulaire qui s'ouvre, ou écrivez-nous directement sur WhatsApp.",
   },
 ];
 
 export default function FAQ() {
   return (
-    <section className="px-6 py-16 md:px-12">
-      <div className="mx-auto max-w-2xl">
+    <section
+      id="questions"
+      className="relative scroll-mt-14 overflow-hidden px-6 py-16 md:scroll-mt-16 md:px-12"
+    >
+      <Backdrop variant="paper" />
+      <div className="relative z-10 mx-auto max-w-2xl">
         <h2 className="text-center font-display text-3xl font-extrabold text-encre sm:text-4xl">
           Questions fréquentes
         </h2>
