@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInView } from "motion/react";
 import { AnimatedNumber } from "@/components/motion-primitives/animated-number";
 import { InView } from "@/components/motion-primitives/in-view";
@@ -9,6 +9,11 @@ import { OFFER, formatFCFA } from "@/lib/offer";
 export default function PromoPrice() {
   const ref = useRef<HTMLParagraphElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    if (inView) setHasAnimated(true);
+  }, [inView]);
 
   return (
     <InView
@@ -22,10 +27,10 @@ export default function PromoPrice() {
       <div className="flex items-end justify-center gap-3">
         <p
           ref={ref}
-          className="font-display text-6xl font-extrabold text-mandarine sm:text-7xl"
+          className="min-w-[9ch] text-center font-display text-6xl font-extrabold tabular-nums text-mandarine sm:text-7xl"
         >
           <AnimatedNumber
-            value={inView ? OFFER.PRIX : 0}
+            value={hasAnimated ? OFFER.PRIX : 0}
             format={(n) => formatFCFA(n)}
             springOptions={{ bounce: 0, duration: 1200 }}
           />

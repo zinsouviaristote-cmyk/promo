@@ -37,6 +37,14 @@ export const cardImages = {
   },
 } as const;
 
+export const chefImage = {
+  src: "/chef.webp",
+  width: 900,
+  height: 1125,
+  alt: "Préparation des mignardises Table Thérapeutique le matin même à Fidjrossè",
+  isPlaceholder: false,
+} as const;
+
 export const ogImage = {
   src: "/og.webp",
   width: 1200,

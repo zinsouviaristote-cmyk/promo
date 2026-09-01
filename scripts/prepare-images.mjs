@@ -15,6 +15,7 @@
  *                  lui-même.
  *  - sandwich, yaourt, mignardises : une photo par produit pour les cartes
  *    « Ce qui est inclus ».
+ *  - chef        : photo portrait pour la section « Le mot du chef ».
  *  - og          : image de partage WhatsApp/réseaux sociaux (1200x630),
  *                  doit rester lisible en miniature dans une conversation.
  */
@@ -42,12 +43,15 @@ const SOURCES = {
   sandwich: "WhatsApp Image 2026-09-01 at 16.08.02.jpeg",
   yaourt: "WhatsApp Image 2026-09-01 at 16.08.07.jpeg",
   mignardises: "WhatsApp Image 2026-09-01 at 16.08.08.jpeg",
+  chef: "WhatsApp Image 2026-09-01 at 16.08.13.jpeg",
   og: "WhatsApp Image 2026-09-01 at 16.08.02.jpeg",
 };
 
 const CARD_SIZE = 800;
 const HERO_WIDTH = 1200;
 const HERO_HEIGHT = 1500; // ratio 4/5
+const CHEF_WIDTH = 900;
+const CHEF_HEIGHT = 1125; // ratio 4/5
 const OG_WIDTH = 1200;
 const OG_HEIGHT = 630;
 const QUALITY = 78;
@@ -81,12 +85,12 @@ async function buildHeroPlaceholder() {
   return sharp(Buffer.from(svg)).webp({ quality: QUALITY });
 }
 
-async function buildCard(role, filename) {
-  const sourcePath = path.join(SOURCE_DIR, filename);
-  if (!existsSync(sourcePath)) {
+async function buildCard(role, filename, width = CARD_SIZE, height = CARD_SIZE) {
+  const sourcePath = path.join(SOURCE_DIR, filename ?? "");
+  if (!filename || !existsSync(sourcePath)) {
     missingSources.push(role);
     const svg = `
-      <svg width="${CARD_SIZE}" height="${CARD_SIZE}" xmlns="http://www.w3.org/2000/svg">
+      <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
         <rect width="100%" height="100%" fill="${colors.mandarine}"/>
         <text x="50%" y="50%" text-anchor="middle" font-family="sans-serif" font-weight="800"
               font-size="48" fill="${colors.creme}">${role}</text>
@@ -97,8 +101,8 @@ async function buildCard(role, filename) {
 
   return sharp(sourcePath)
     .resize({
-      width: CARD_SIZE,
-      height: CARD_SIZE,
+      width,
+      height,
       fit: "cover",
       position: sharp.strategy.attention,
     })
@@ -151,6 +155,9 @@ async function main() {
   const mignardisesPipeline = await buildCard("mignardises", SOURCES.mignardises);
   await mignardisesPipeline.toFile(path.join(PUBLIC_DIR, "carte-mignardises.webp"));
 
+  const chefPipeline = await buildCard("chef", SOURCES.chef, CHEF_WIDTH, CHEF_HEIGHT);
+  await chefPipeline.toFile(path.join(PUBLIC_DIR, "chef.webp"));
+
   const ogPipeline = await buildOg(SOURCES.og);
   await ogPipeline.toFile(path.join(PUBLIC_DIR, "og.webp"));
 
@@ -193,6 +200,14 @@ export const cardImages = {
   },
 } as const;
 
+export const chefImage = {
+  src: "/chef.webp",
+  width: ${CHEF_WIDTH},
+  height: ${CHEF_HEIGHT},
+  alt: "Préparation des mignardises Table Thérapeutique le matin même à Fidjrossè",
+  isPlaceholder: ${missingSources.includes("chef")},
+} as const;
+
 export const ogImage = {
   src: "/og.webp",
   width: ${OG_WIDTH},
@@ -209,6 +224,7 @@ export const ogImage = {
   console.log("  - carte-sandwich.webp");
   console.log("  - carte-yaourt.webp");
   console.log("  - carte-mignardises.webp");
+  console.log("  - chef.webp");
   console.log("  - og.webp");
   if (missingSources.length > 0) {
     console.log("\nRôles sans photo source (aplat de couleur utilisé) :", missingSources.join(", "));
